@@ -1,0 +1,39 @@
+services:
+  legacy-auth-postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: legacy_auth_practice
+    ports:
+      - 5432:5432
+    volumes:
+      - legacy_auth_postgres_data:/var/lib/postgresql/data
+
+  legacy-auth-api:
+    build:
+      context: .
+      dockerfile: apps/legacy-auth-api/Dockerfile.dev
+    ports:
+      - 4000:4000
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@legacy-auth-postgres:5432/legacy_auth_practice
+      SESSION_SECRET: secret
+    volumes:
+      - ./apps/legacy-auth-api/src:/repo/apps/legacy-auth-api/src
+    depends_on:
+      - legacy-auth-postgres
+
+  web-ui:
+    build:
+      context: .
+      dockerfile: apps/web-ui/Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./apps/web-ui/src:/repo/apps/web-ui/src
+    
+
+volumes:
+  legacy_auth_postgres_data:

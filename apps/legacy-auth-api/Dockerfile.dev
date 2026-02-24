@@ -1,0 +1,19 @@
+FROM node:20-slim
+
+WORKDIR /repo
+
+RUN corepack enable
+
+RUN apt-get update && apt-get install -y openssl
+
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+
+COPY apps/legacy-auth-api/package.json apps/legacy-auth-api/package.json
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+RUN pnpm -C apps/legacy-auth-api prisma:generate
+
+CMD ["pnpm", "-C", "apps/legacy-auth-api", "dev"]
