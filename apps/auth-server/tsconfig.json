@@ -20,6 +20,13 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@iam/application/*": ["./src/iam/application/*"],
+      "@iam/infrastructure/*": ["./src/iam/infrastructure/*"],
+      "@iam/domain/*": ["./src/iam/domain/*"],
+      "@iam/tokens": ["./src/iam/iam.tokens"],
+      "@iam/api/*": ["./src/iam/api/*"]
+    }
   }
 }

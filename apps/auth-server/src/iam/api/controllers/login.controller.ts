@@ -9,24 +9,30 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { LoginRequestDto } from '../dto/login.request.dto';
+import { LoginUseCase } from '@iam/application/use-cases/login.usecase';
 
 @Controller('auth')
 export class LoginController {
+  constructor(private readonly loginUseCase: LoginUseCase) {}
+
   @Post('login')
   login(@Body() body: LoginRequestDto, @Res() res: Response): void {
-    if (body.email === 'test@test.com' && body.password === 'test') {
-      if (!body.returnTo) {
-        res.redirect(302, '/auth/login?error=invalid_settings');
+    try {
+      const user = this.loginUseCase.execute(body.email, body.password);
+      if (!user) {
+        res.redirect(
+          302,
+          `/auth/login?error=invalid_credentials&returnTo=${body.returnTo}`,
+        );
         return;
       }
-      res.redirect(302, body.returnTo);
-      return;
+      res.redirect(302, `${body.returnTo}?access_token=test`);
+    } catch {
+      res.redirect(
+        302,
+        `/auth/login?error=invalid_credentials&returnTo=${body.returnTo}`,
+      );
     }
-
-    res.redirect(
-      302,
-      `/auth/login?error=invalid_credentials&returnTo=${body.returnTo}`,
-    );
   }
 
   @Get('login')
