@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": "123",
+      "email": "test@test.com",
+      "passwordHash": "123"
+    }
+  ],
+  "clients": [
+    {
+      "id": "123",
+      "name": "Test Client",
+      "clientSecret": "test",
+      "redirectUris": ["http://localhost:3001"]
+    }
+  ],
+  "authorizationCodes": []
+}

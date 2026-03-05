@@ -22,11 +22,18 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@iam/application/*": ["./src/iam/application/*"],
-      "@iam/infrastructure/*": ["./src/iam/infrastructure/*"],
-      "@iam/domain/*": ["./src/iam/domain/*"],
-      "@iam/tokens": ["./src/iam/iam.tokens"],
-      "@iam/api/*": ["./src/iam/api/*"]
+      "@iam/application/*": ["src/modules/iam/application/*"],
+      "@iam/infrastructure/*": ["src/modules/iam/infrastructure/*"],
+      "@iam/domain/*": ["src/modules/iam/domain/*"],
+      "@iam/tokens": ["src/modules/iam/iam.tokens"],
+      "@iam/api/*": ["src/modules/iam/api/*"],
+      "@oauth/application/*": ["./src/modules/oauth/application/*"],
+      "@oauth/infrastructure/*": ["./src/modules/oauth/infrastructure/*"],
+      "@oauth/domain/*": ["./src/modules/oauth/domain/*"],
+      "@oauth/api/*": ["./src/modules/oauth/api/*"],
+      "@oauth/tokens": ["./src/modules/oauth/oauth.tokens"],
+      "@database/lowdb/*": ["./src/infrastructure/database/lowdb/*"],
+      "@common/types/*": ["./src/common/types/*"]
     }
   }
 }
