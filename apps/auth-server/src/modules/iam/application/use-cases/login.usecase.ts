@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { UserRepositoryPort } from 'src/modules/iam/application/ports/user.repository.port';
+import type { UserRepositoryPort } from '@iam/application/ports/user-repository.port';
 import type { PasswordHasherPort } from 'src/modules/iam/application/ports/password-hasher.port';
 import type { User } from 'src/modules/iam/domain/entities/user.entity';
 import { PASSWORD_HASHER, USER_REPOSITORY } from 'src/modules/iam/iam.tokens';

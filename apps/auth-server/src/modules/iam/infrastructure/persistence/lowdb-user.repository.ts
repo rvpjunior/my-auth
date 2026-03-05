@@ -1,5 +1,5 @@
 import { User } from 'src/modules/iam/domain/entities/user.entity';
-import type { UserRepositoryPort } from 'src/modules/iam/application/ports/user.repository.port';
+import type { UserRepositoryPort } from '@iam/application/ports/user-repository.port';
 import { Injectable } from '@nestjs/common';
 import { LowdbService } from '@database/lowdb/lowdb.service';
 

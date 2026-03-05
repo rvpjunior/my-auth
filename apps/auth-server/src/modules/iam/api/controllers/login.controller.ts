@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Post,
   Query,
   Render,
@@ -13,13 +14,15 @@ import {
   GetLoginRequestDto,
 } from '../dto/login.request.dto';
 import { LoginUseCase } from 'src/modules/iam/application/use-cases/login.usecase';
-import { SessionService } from '@sessions/application/services/session.service';
+import type { SessionWriterPort } from '@sessions/application/ports/session-writer.port';
+import { SESSION_WRITER } from '@sessions/tokens';
 
 @Controller('auth')
 export class LoginController {
   constructor(
     private readonly loginUseCase: LoginUseCase,
-    private readonly sessionService: SessionService,
+    @Inject(SESSION_WRITER)
+    private readonly sessionWriter: SessionWriterPort,
   ) {}
 
   @Post('login')
@@ -37,7 +40,7 @@ export class LoginController {
         return;
       }
 
-      const session = await this.sessionService.createSession(user.id);
+      const session = await this.sessionWriter.createSession(user.id);
       res.cookie('sid', session.id, {
         httpOnly: true,
         secure: false,

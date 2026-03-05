@@ -1,5 +1,5 @@
 import { LowdbService } from '@database/lowdb/lowdb.service';
-import { SessionRepositoryPort } from '@sessions/application/ports/session.repository.port';
+import { SessionRepositoryPort } from '@sessions/application/ports/session-repository.port';
 import { Session } from '@sessions/domain/entities/session.entity';
 import { Injectable } from '@nestjs/common';
 

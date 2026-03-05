@@ -1,14 +1,26 @@
 import { Module } from '@nestjs/common';
-import { SessionService } from '@sessions/application/services/session.service';
 import { LowdbSessionRepository } from '@sessions/infrastructure/persistence/lowdb-session.repository';
-import { SESSION_REPOSITORY } from '@sessions/tokens';
+import {
+  SESSION_READER,
+  SESSION_REPOSITORY,
+  SESSION_WRITER,
+} from '@sessions/tokens';
 import { DatabaseModule } from '@database/lowdb/database.module';
+import { SessionService } from '@sessions/application/services/session.service';
 
 @Module({
   imports: [DatabaseModule],
-  exports: [SessionService],
+  exports: [SESSION_READER, SESSION_WRITER],
   providers: [
     SessionService,
+    {
+      provide: SESSION_READER,
+      useExisting: SessionService,
+    },
+    {
+      provide: SESSION_WRITER,
+      useExisting: SessionService,
+    },
     {
       provide: SESSION_REPOSITORY,
       useClass: LowdbSessionRepository,

@@ -1,11 +1,13 @@
-import type { SessionRepositoryPort } from '../ports/session.repository.port';
+import type { SessionRepositoryPort } from '../ports/session-repository.port';
 import { Session } from '@sessions/domain/entities/session.entity';
 import { randomUUID } from 'crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import { SESSION_REPOSITORY } from '@sessions/tokens';
+import { SessionReaderPort } from '../ports/session-reader.port';
+import { SessionWriterPort } from '../ports/session-writer.port';
 
 @Injectable()
-export class SessionService {
+export class SessionService implements SessionReaderPort, SessionWriterPort {
   constructor(
     @Inject(SESSION_REPOSITORY)
     private readonly sessionRepository: SessionRepositoryPort,

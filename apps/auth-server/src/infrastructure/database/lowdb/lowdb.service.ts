@@ -7,9 +7,12 @@ import path from 'node:path';
 @Injectable()
 export class LowdbService {
   private db: Low<DBSchema>;
+  private initialized = false;
   constructor() {}
 
   async init() {
+    if (this.initialized) return;
+    this.initialized = true;
     // Use project root so data persists across rebuilds (dist/ is wiped on each build)
     const dbPath = path.join(process.cwd(), 'db.json');
     const adapter = new JSONFile<DBSchema>(dbPath);

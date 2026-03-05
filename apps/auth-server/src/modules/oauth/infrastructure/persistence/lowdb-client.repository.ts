@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ClientRepositoryPort } from '@oauth/application/ports/client.repository.port';
+import { ClientRepositoryPort } from '@oauth/application/ports/client-repository.port';
 import { Client } from '@oauth/domain/entities/client.entity';
 import { LowdbService } from '@database/lowdb/lowdb.service';
 

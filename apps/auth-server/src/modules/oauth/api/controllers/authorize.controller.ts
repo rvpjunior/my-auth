@@ -1,15 +1,17 @@
-import { Controller, Get, Query, Req, Res } from '@nestjs/common';
-import { AuthorizeRequestDto } from '../dtos/authorize.request.dto';
+import { Controller, Get, Inject, Query, Req, Res } from '@nestjs/common';
+import { AuthorizeRequestDto } from '../dto/authorize.request.dto';
 import { AuthorizeUseCase } from '@oauth/application/use-cases/authorize.usecase';
 import type { AuthRequest } from '@common/types/auth-request';
 import type { Response } from 'express';
-import { SessionService } from '@sessions/application/services/session.service';
+import { SESSION_READER } from '@sessions/tokens';
+import type { SessionReaderPort } from '@sessions/application/ports/session-reader.port';
 
 @Controller('oauth')
 export class AuthorizeController {
   constructor(
     private readonly authorizeUseCase: AuthorizeUseCase,
-    private readonly sessionService: SessionService,
+    @Inject(SESSION_READER)
+    private readonly sessionReader: SessionReaderPort,
   ) {}
 
   @Get('authorize')
@@ -27,8 +29,15 @@ export class AuthorizeController {
       );
     }
 
-    // validate the session and get the user id
-    const userId = this.sessionService.findSessionById(sid)?.userId;
+    const session = this.sessionReader.findSessionById(sid);
+    if (!session) {
+      return res.redirect(
+        302,
+        `/auth/login?redirectTo=${encodeURIComponent(req.originalUrl)}`,
+      );
+    }
+
+    const userId = session.userId;
     if (!userId) {
       return res.redirect(
         302,

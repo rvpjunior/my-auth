@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { ClientRepositoryPort } from '@oauth/application/ports/client.repository.port';
-import type { AuthorizationCodeRepositoryPort } from '@oauth/application/ports/authorization-code.repository.port';
+import type { ClientRepositoryPort } from '@oauth/application/ports/client-repository.port';
+import type { AuthorizationCodeRepositoryPort } from '@oauth/application/ports/authorization-code-repository.port';
 import {
   CLIENT_REPOSITORY,
   AUTHORIZATION_CODE_REPOSITORY,
