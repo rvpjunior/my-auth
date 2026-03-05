@@ -3,10 +3,14 @@ import { AuthorizeRequestDto } from '../dtos/authorize.request.dto';
 import { AuthorizeUseCase } from '@oauth/application/use-cases/authorize.usecase';
 import type { AuthRequest } from '@common/types/auth-request';
 import type { Response } from 'express';
+import { SessionService } from '@sessions/application/services/session.service';
 
 @Controller('oauth')
 export class AuthorizeController {
-  constructor(private readonly authorizeUseCase: AuthorizeUseCase) {}
+  constructor(
+    private readonly authorizeUseCase: AuthorizeUseCase,
+    private readonly sessionService: SessionService,
+  ) {}
 
   @Get('authorize')
   async authorize(
@@ -24,7 +28,14 @@ export class AuthorizeController {
     }
 
     // validate the session and get the user id
-    const userId = '123';
+    const userId = this.sessionService.findSessionById(sid)?.userId;
+    if (!userId) {
+      return res.redirect(
+        302,
+        `/auth/login?redirectTo=${encodeURIComponent(req.originalUrl)}`,
+      );
+    }
+
     try {
       const result = await this.authorizeUseCase.execute(
         query.clientId,
@@ -50,7 +61,10 @@ export class AuthorizeController {
       }
     } catch (error) {
       console.error(error);
-      return res.redirect(302, '/auth/login?error=unknown_error');
+      return res.redirect(
+        302,
+        `/auth/login?error=unknown_error&redirectTo=${encodeURIComponent(req.originalUrl)}`,
+      );
     }
   }
 }

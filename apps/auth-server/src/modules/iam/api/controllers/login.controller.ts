@@ -13,13 +13,20 @@ import {
   GetLoginRequestDto,
 } from '../dto/login.request.dto';
 import { LoginUseCase } from 'src/modules/iam/application/use-cases/login.usecase';
+import { SessionService } from '@sessions/application/services/session.service';
 
 @Controller('auth')
 export class LoginController {
-  constructor(private readonly loginUseCase: LoginUseCase) {}
+  constructor(
+    private readonly loginUseCase: LoginUseCase,
+    private readonly sessionService: SessionService,
+  ) {}
 
   @Post('login')
-  login(@Body() body: PostLoginRequestDto, @Res() res: Response): void {
+  async login(
+    @Body() body: PostLoginRequestDto,
+    @Res() res: Response,
+  ): Promise<void> {
     try {
       const user = this.loginUseCase.execute(body.email, body.password);
       if (!user) {
@@ -29,7 +36,9 @@ export class LoginController {
         );
         return;
       }
-      res.cookie('sid', '123', {
+
+      const session = await this.sessionService.createSession(user.id);
+      res.cookie('sid', session.id, {
         httpOnly: true,
         secure: false,
         sameSite: 'lax',
@@ -38,7 +47,10 @@ export class LoginController {
       return res.redirect(302, body.redirectTo);
     } catch (error) {
       console.error(error);
-      return res.redirect(302, `/auth/login?error=unknown_error`);
+      return res.redirect(
+        302,
+        `/auth/login?error=unknown_error&redirectTo=${encodeURIComponent(body.redirectTo)}`,
+      );
     }
   }
 

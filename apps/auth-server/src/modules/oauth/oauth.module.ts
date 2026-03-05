@@ -8,10 +8,11 @@ import {
   CLIENT_REPOSITORY,
 } from '@oauth/tokens';
 import { DatabaseModule } from '@database/lowdb/database.module';
+import { SessionsModule } from '@sessions/sessions.module';
 
 @Module({
   controllers: [AuthorizeController],
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, SessionsModule],
   providers: [
     AuthorizeUseCase,
     {

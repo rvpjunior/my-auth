@@ -18,6 +18,7 @@ export class LowdbService {
       users: [],
       clients: [],
       authorizationCodes: [],
+      sessions: [],
     } satisfies DBSchema);
 
     await this.db.read();

@@ -14,5 +14,6 @@
       "redirectUris": ["http://localhost:3001"]
     }
   ],
-  "authorizationCodes": []
+  "authorizationCodes": [],
+  "sessions": []
 }

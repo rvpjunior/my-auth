@@ -33,7 +33,12 @@
       "@oauth/api/*": ["./src/modules/oauth/api/*"],
       "@oauth/tokens": ["./src/modules/oauth/oauth.tokens"],
       "@database/lowdb/*": ["./src/infrastructure/database/lowdb/*"],
-      "@common/types/*": ["./src/common/types/*"]
+      "@common/types/*": ["./src/common/types/*"],
+      "@sessions/application/*": ["./src/modules/sessions/application/*"],
+      "@sessions/infrastructure/*": ["./src/modules/sessions/infrastructure/*"],
+      "@sessions/domain/*": ["./src/modules/sessions/domain/*"],
+      "@sessions/tokens": ["./src/modules/sessions/sessions.tokens"],
+      "@sessions/sessions.module": ["./src/modules/sessions/sessions.module"]
     }
   }
 }
