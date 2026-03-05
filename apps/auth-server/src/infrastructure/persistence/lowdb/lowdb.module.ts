@@ -5,7 +5,7 @@ import { LowdbService } from './lowdb.service';
   providers: [LowdbService],
   exports: [LowdbService],
 })
-export class DatabaseModule implements OnModuleInit {
+export class LowdbModule implements OnModuleInit {
   constructor(private readonly db: LowdbService) {}
 
   async onModuleInit() {

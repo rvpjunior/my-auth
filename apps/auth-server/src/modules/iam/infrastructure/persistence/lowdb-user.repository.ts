@@ -1,7 +1,7 @@
 import { User } from 'src/modules/iam/domain/entities/user.entity';
 import type { UserRepositoryPort } from '@iam/application/ports/user-repository.port';
 import { Injectable } from '@nestjs/common';
-import { LowdbService } from '@database/lowdb/lowdb.service';
+import { LowdbService } from 'src/infrastructure/persistence/lowdb/lowdb.service';
 
 @Injectable()
 export class LowdbUserRepository implements UserRepositoryPort {

@@ -5,11 +5,11 @@ import {
   SESSION_REPOSITORY,
   SESSION_WRITER,
 } from '@sessions/tokens';
-import { DatabaseModule } from '@database/lowdb/database.module';
+import { LowdbModule } from '@infrastructure/persistence/lowdb/lowdb.module';
 import { SessionService } from '@sessions/application/services/session.service';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [LowdbModule],
   exports: [SESSION_READER, SESSION_WRITER],
   providers: [
     SessionService,

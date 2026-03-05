@@ -32,7 +32,9 @@
       "@oauth/domain/*": ["./src/modules/oauth/domain/*"],
       "@oauth/api/*": ["./src/modules/oauth/api/*"],
       "@oauth/tokens": ["./src/modules/oauth/oauth.tokens"],
-      "@database/lowdb/*": ["./src/infrastructure/database/lowdb/*"],
+      "@infrastructure/persistence/lowdb/*": [
+        "src/infrastructure/persistence/lowdb/*"
+      ],
       "@common/types/*": ["./src/common/types/*"],
       "@sessions/application/*": ["./src/modules/sessions/application/*"],
       "@sessions/infrastructure/*": ["./src/modules/sessions/infrastructure/*"],

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LowdbService } from '@database/lowdb/lowdb.service';
+import { LowdbService } from 'src/infrastructure/persistence/lowdb/lowdb.service';
 import { AuthorizationCodeRepositoryPort } from '@oauth/application/ports/authorization-code-repository.port';
 import { AuthorizationCode } from '@oauth/domain/entities/authorization-code.entity';
 

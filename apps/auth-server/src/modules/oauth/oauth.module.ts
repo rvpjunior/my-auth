@@ -7,12 +7,12 @@ import {
   AUTHORIZATION_CODE_REPOSITORY,
   CLIENT_REPOSITORY,
 } from '@oauth/tokens';
-import { DatabaseModule } from '@database/lowdb/database.module';
+import { LowdbModule } from '@infrastructure/persistence/lowdb/lowdb.module';
 import { SessionsModule } from '@sessions/sessions.module';
 
 @Module({
   controllers: [AuthorizeController],
-  imports: [DatabaseModule, SessionsModule],
+  imports: [LowdbModule, SessionsModule],
   providers: [
     AuthorizeUseCase,
     {
