@@ -6,9 +6,9 @@ export const Dashboard = () => {
       <button
         className="rounded-lg border border-slate-600 px-4 py-2 text-slate-300 hover:bg-slate-800 transition-colors"
         onClick={() => {
-          window.localStorage.removeItem("access_token");
+          window.localStorage.removeItem("code");
           window.location.href =
-            "http://localhost:3000/auth/login?returnTo=http://localhost:3001";
+            "http://localhost:4000/auth/logout?redirectTo=http://localhost:3000";
         }}
       >
         Sign out

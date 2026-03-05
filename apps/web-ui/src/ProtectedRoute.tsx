@@ -6,17 +6,17 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const queryParams = new URLSearchParams(window.location.search);
-      const accessToken = queryParams.get("access_token");
+      const code = queryParams.get("code");
 
-      if (accessToken) {
-        window.localStorage.setItem("access_token", accessToken);
+      if (code) {
+        window.localStorage.setItem("code", code);
         window.history.replaceState({}, "", window.location.pathname);
         setIsLoading(false);
       } else {
-        const accessToken = window.localStorage.getItem("access_token");
-        if (!accessToken) {
+        const code = window.localStorage.getItem("code");
+        if (!code) {
           window.location.href =
-            "http://localhost:3000/auth/login?returnTo=http://localhost:3001";
+            "http://localhost:4000/oauth/authorize?clientId=123&redirectUri=http://localhost:3000&responseType=code";
         } else {
           setIsLoading(false);
         }
