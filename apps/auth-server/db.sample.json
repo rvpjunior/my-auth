@@ -15,5 +15,6 @@
     }
   ],
   "authorizationCodes": [],
-  "sessions": []
+  "sessions": [],
+  "refreshTokens": []
 }

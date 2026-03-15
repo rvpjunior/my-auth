@@ -22,6 +22,7 @@ export class LowdbService {
       clients: [],
       authorizationCodes: [],
       sessions: [],
+      refreshTokens: [],
     } satisfies DBSchema);
 
     await this.db.read();

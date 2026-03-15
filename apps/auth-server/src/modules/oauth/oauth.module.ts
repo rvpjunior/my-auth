@@ -6,6 +6,7 @@ import { LowdbAuthorizationCodeRepository } from '@oauth/infrastructure/persiste
 import {
   AUTHORIZATION_CODE_REPOSITORY,
   CLIENT_REPOSITORY,
+  REFRESH_TOKEN_REPOSITORY,
   SIGNER,
 } from '@oauth/tokens';
 import { LowdbModule } from '@infrastructure/persistence/lowdb/lowdb.module';
@@ -13,6 +14,7 @@ import { SessionsModule } from '@sessions/sessions.module';
 import { JoseSigner } from './infrastructure/crypto/jose-signer';
 import { TokenController } from './api/controllers/token.controller';
 import { TokenUseCase } from './application/use-cases/token.usecase';
+import { LowdbRefreshTokenRepository } from './infrastructure/persistence/lowdb-refresh-token.repository';
 
 @Module({
   controllers: [AuthorizeController, TokenController],
@@ -27,6 +29,10 @@ import { TokenUseCase } from './application/use-cases/token.usecase';
     {
       provide: AUTHORIZATION_CODE_REPOSITORY,
       useClass: LowdbAuthorizationCodeRepository,
+    },
+    {
+      provide: REFRESH_TOKEN_REPOSITORY,
+      useClass: LowdbRefreshTokenRepository,
     },
     {
       provide: SIGNER,

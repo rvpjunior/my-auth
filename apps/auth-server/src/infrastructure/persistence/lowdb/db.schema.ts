@@ -22,4 +22,10 @@ export type DBSchema = {
     userId: string;
     expiresAt: Date;
   }[];
+  refreshTokens: {
+    token: string;
+    clientId: string;
+    userId: string;
+    expiresAt: Date;
+  }[];
 };

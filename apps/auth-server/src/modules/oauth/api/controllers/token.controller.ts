@@ -1,26 +1,40 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Req } from '@nestjs/common';
 import { TokenUseCase } from '@oauth/application/use-cases/token.usecase';
 import type { PostTokenRequestDto } from '../dto/token-request.dto';
+import type { SessionReaderPort } from '@sessions/application/ports/session-reader.port';
+import { SESSION_READER } from '@sessions/tokens';
+import type { AuthRequest } from '@common/types/auth-request';
 
 @Controller('oauth')
 export class TokenController {
-  constructor(private readonly tokenUseCase: TokenUseCase) {}
+  constructor(
+    private readonly tokenUseCase: TokenUseCase,
+    @Inject(SESSION_READER) private readonly sessionReader: SessionReaderPort,
+  ) {}
 
   @Post('token')
-  async token(@Body() body: PostTokenRequestDto) {
-    try {
-      const result = await this.tokenUseCase.execute(
-        body.grant_type,
-        body.code,
-        body.redirect_uri,
-      );
+  async token(@Body() body: PostTokenRequestDto, @Req() req: AuthRequest) {
+    const sid = req.cookies.sid;
 
+    if (!sid) {
+      return {
+        error: 'login_required',
+      };
+    }
+
+    const session = this.sessionReader.findSessionById(sid);
+    if (!session) {
+      return {
+        error: 'login_required',
+      };
+    }
+
+    try {
+      const result = await this.tokenUseCase.execute(body);
       return result;
     } catch (error) {
-      console.error(error);
       return {
-        error: 'internal_server_error',
-        error_description: 'Internal server error',
+        error: error instanceof Error ? error.message : 'unknown_error',
       };
     }
   }
