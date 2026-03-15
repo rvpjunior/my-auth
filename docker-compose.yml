@@ -24,6 +24,7 @@ services:
       - ./apps/legacy-auth-api/src:/repo/apps/legacy-auth-api/src
     depends_on:
       - legacy-auth-postgres
+      - web-ui
 
   web-ui:
     build:
@@ -33,7 +34,17 @@ services:
       - 3000:3000
     volumes:
       - ./apps/web-ui/src:/repo/apps/web-ui/src
-    
+
+  auth-server:
+    build:
+      context: .
+      dockerfile: apps/auth-server/Dockerfile.dev
+    ports:
+      - 4000:4000
+    volumes:
+      - ./apps/auth-server/src:/repo/apps/auth-server/src
+    depends_on:
+      - web-ui
 
 volumes:
   legacy_auth_postgres_data:

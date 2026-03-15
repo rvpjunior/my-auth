@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Query, Req, Res } from '@nestjs/common';
-import { AuthorizeRequestDto } from '../dto/authorize.request.dto';
+import { AuthorizeRequestDto } from '../dto/authorize-request.dto';
 import { AuthorizeUseCase } from '@oauth/application/use-cases/authorize.usecase';
 import type { AuthRequest } from '@common/types/auth-request';
 import type { Response } from 'express';

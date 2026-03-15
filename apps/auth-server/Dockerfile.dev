@@ -1,0 +1,17 @@
+FROM node:20-slim
+
+WORKDIR /repo
+
+RUN corepack enable
+
+RUN apt-get update && apt-get install -y openssl
+
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+
+COPY apps/auth-server/package.json apps/auth-server/package.json
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+CMD ["pnpm", "-C", "apps/auth-server", "dev"]

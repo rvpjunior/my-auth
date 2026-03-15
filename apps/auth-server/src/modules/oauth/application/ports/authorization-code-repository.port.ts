@@ -3,4 +3,5 @@ import { AuthorizationCode } from '@oauth/domain/entities/authorization-code.ent
 export interface AuthorizationCodeRepositoryPort {
   findByCode(code: string): AuthorizationCode | null;
   create(authorizationCode: AuthorizationCode): Promise<void>;
+  delete(code: string): Promise<void>;
 }

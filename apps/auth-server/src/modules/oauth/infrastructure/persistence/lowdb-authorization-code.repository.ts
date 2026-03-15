@@ -33,4 +33,11 @@ export class LowdbAuthorizationCodeRepository implements AuthorizationCodeReposi
     });
     await this.db.write();
   }
+
+  async delete(code: string): Promise<void> {
+    this.db.data.authorizationCodes = this.db.data.authorizationCodes.filter(
+      (authorizationCode) => authorizationCode.code !== code,
+    );
+    await this.db.write();
+  }
 }
