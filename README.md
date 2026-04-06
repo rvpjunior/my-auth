@@ -21,6 +21,13 @@ pnpm install
 
 ### Authorization Server
 
+Setup the certificates:
+
+```
+openssl genpkey -algorithm RSA -out apps/auth-server/certs/jwt-private.pem -pkeyopt rsa_keygen_bits:2048
+penssl rsa -pubout -in apps/auth-server/certs/jwt-private.pem -out apps/auth-server/certs/jwt-public.pem
+```
+
 Setup the database:
 
 ```
