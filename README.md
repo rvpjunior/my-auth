@@ -19,8 +19,6 @@ Install the dependencies:
 pnpm install
 ```
 
-### Authorization Server
-
 Setup the certificates:
 
 ```
@@ -34,19 +32,9 @@ Setup the database:
 cp apps/auth-server/db.sample.json apps/auth-server/db.json
 ```
 
-Run the service:
+Run the services:
 
 ```
-cd apps/auth-server
-pnpm run dev
-```
-
-### Web UI
-
-Run the service:
-
-```
-cd apps/web-ui
 pnpm run dev
 ```
 
