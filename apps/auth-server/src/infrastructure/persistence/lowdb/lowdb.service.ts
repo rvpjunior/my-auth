@@ -13,7 +13,7 @@ export class LowdbService {
   async init() {
     if (this.initialized) return;
     this.initialized = true;
-    // Use project root so data persists across rebuilds (dist/ is wiped on each build)
+
     const dbPath = path.join(process.cwd(), 'db.json');
     const adapter = new JSONFile<DBSchema>(dbPath);
 
@@ -38,6 +38,11 @@ export class LowdbService {
   }
 
   async write() {
+    if (!this.db) {
+      throw new Error(
+        'Database not initialized. Ensure DatabaseModule is imported and onModuleInit has run.',
+      );
+    }
     await this.db.write();
   }
 }

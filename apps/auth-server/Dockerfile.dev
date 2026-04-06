@@ -10,6 +10,8 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 
 COPY apps/auth-server/package.json apps/auth-server/package.json
 
+COPY apps/auth-server/db.json apps/auth-server/db.json
+
 RUN pnpm install --frozen-lockfile
 
 COPY . .

@@ -32,19 +32,19 @@ export class TokenUseCase {
       request.code,
     );
     if (!authorizationCode) {
-      throw new Error('invalid_grant');
+      throw new Error('Invalid authorization code');
     }
 
     if (authorizationCode.clientId !== request.client_id) {
-      throw new Error('invalid_request');
+      throw new Error('Invalid client ID');
     }
 
     if (authorizationCode.redirectUri !== request.redirect_uri) {
-      throw new Error('invalid_request');
+      throw new Error('Invalid redirect URI');
     }
 
     if (authorizationCode.expiresAt < new Date()) {
-      throw new Error('invalid_grant');
+      throw new Error('Authorization code expired');
     }
 
     await this.authorizationCodeRepository.delete(authorizationCode.code);
@@ -59,15 +59,15 @@ export class TokenUseCase {
       request.refresh_token,
     );
     if (!refreshToken) {
-      throw new Error('invalid_request');
+      throw new Error('Invalid refresh token');
     }
 
     if (refreshToken.clientId !== request.client_id) {
-      throw new Error('invalid_grant');
+      throw new Error('Invalid client ID');
     }
 
     if (refreshToken.expiresAt < new Date()) {
-      throw new Error('invalid_grant');
+      throw new Error('Refresh token expired');
     }
 
     await this.refreshTokenRepository.delete(refreshToken.token);
@@ -83,7 +83,7 @@ export class TokenUseCase {
     } else if (request.grant_type === 'refresh_token') {
       userId = await this.executeRefreshToken(request);
     } else {
-      throw new Error('invalid_request');
+      throw new Error('Invalid grant type');
     }
 
     const refreshToken = new RefreshToken(

@@ -43,6 +43,7 @@ services:
       - 4000:4000
     volumes:
       - ./apps/auth-server/src:/repo/apps/auth-server/src
+      - ./apps/auth-server/db.json:/repo/apps/auth-server/db.json
     depends_on:
       - web-ui
 

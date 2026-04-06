@@ -23,26 +23,17 @@ export class AuthorizeController {
     const sid = req.cookies.sid;
 
     if (!sid) {
-      return res.redirect(
-        302,
-        `/auth/login?redirectTo=${encodeURIComponent(req.originalUrl)}`,
-      );
+      return this.redirecToLogin(res, req.originalUrl);
     }
 
     const session = this.sessionReader.findSessionById(sid);
     if (!session) {
-      return res.redirect(
-        302,
-        `/auth/login?redirectTo=${encodeURIComponent(req.originalUrl)}`,
-      );
+      return this.redirecToLogin(res, req.originalUrl);
     }
 
     const userId = session.userId;
     if (!userId) {
-      return res.redirect(
-        302,
-        `/auth/login?redirectTo=${encodeURIComponent(req.originalUrl)}`,
-      );
+      return this.redirecToLogin(res, req.originalUrl);
     }
 
     try {
@@ -57,23 +48,32 @@ export class AuthorizeController {
         case 'redirect_to_client':
           return res.redirect(302, result.redirectTo);
         case 'invalid_client':
-          return res.redirect(302, '/auth/login?error=invalid_client');
+          return this.redirecToLogin(res, req.originalUrl, 'invalid_client');
         case 'invalid_redirect_uri':
-          return res.redirect(302, '/auth/login?error=invalid_redirect_uri');
-        case 'invalid_response_type':
-          return res.redirect(302, '/auth/login?error=invalid_response_type');
-        case 'login_required':
-          return res.redirect(
-            302,
-            `/auth/login?redirectTo=${encodeURIComponent(req.originalUrl)}`,
+          return this.redirecToLogin(
+            res,
+            req.originalUrl,
+            'invalid_redirect_uri',
           );
+        case 'invalid_response_type':
+          return this.redirecToLogin(
+            res,
+            req.originalUrl,
+            'invalid_response_type',
+          );
+        case 'login_required':
+          return this.redirecToLogin(res, req.originalUrl);
       }
     } catch (error) {
       console.error(error);
-      return res.redirect(
-        302,
-        `/auth/login?error=unknown_error&redirectTo=${encodeURIComponent(req.originalUrl)}`,
-      );
+      return this.redirecToLogin(res, req.originalUrl, 'unknown_error');
     }
+  }
+
+  private redirecToLogin(res: Response, originalUrl: string, error?: string) {
+    return res.redirect(
+      302,
+      `/auth/login?${error ? `error=${error}&` : ''}redirectTo=${encodeURIComponent(originalUrl)}`,
+    );
   }
 }

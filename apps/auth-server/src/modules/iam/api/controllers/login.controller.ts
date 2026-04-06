@@ -63,13 +63,29 @@ export class LoginController {
     redirectTo: string | undefined;
     errorMessage: string | null;
   } {
-    const errorMessage = query.error
-      ? query.error === 'invalid_credentials'
-        ? 'Invalid credentials'
-        : query.error === 'invalid_client'
-          ? 'Invalid settings'
-          : 'An unknown error occurred'
-      : null;
+    let errorMessage: string | null = null;
+    if (query.error) {
+      switch (query.error) {
+        case 'invalid_credentials':
+          errorMessage = 'Invalid credentials. Please try again.';
+          break;
+        case 'invalid_client':
+          errorMessage = 'Invalid settings. The client is not registered.';
+          break;
+        case 'invalid_redirect_uri':
+          errorMessage =
+            'Invalid settings. The redirect URI is not registered.';
+          break;
+        case 'invalid_response_type':
+          errorMessage =
+            'Invalid settings. The response type is not supported.';
+          break;
+        case 'unknown_error':
+        default:
+          errorMessage = 'An unknown error occurred. Please try again later.';
+          break;
+      }
+    }
     return { redirectTo: query.redirectTo, errorMessage };
   }
 }

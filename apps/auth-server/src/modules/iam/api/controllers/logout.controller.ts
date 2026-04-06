@@ -10,6 +10,7 @@ export class LogoutController {
     @Inject(SESSION_WRITER)
     private readonly sessionWriter: SessionWriterPort,
   ) {}
+
   @Get('logout')
   async logout(
     @Query('redirectTo') redirectTo: string,

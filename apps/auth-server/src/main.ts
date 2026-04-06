@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { join } from 'node:path';
 
+const PORT = process.env.PORT ?? 4000;
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
@@ -16,6 +18,14 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     credentials: true,
   });
-  await app.listen(process.env.PORT ?? 4000);
+  await app.listen(PORT);
 }
-bootstrap();
+
+bootstrap()
+  .then(() => {
+    console.log(`Auth server listening on port ${PORT}`);
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
