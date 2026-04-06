@@ -6,10 +6,9 @@ The goal of this project is to understand how identity providers like Auth0, Okt
 
 ## Project Structure
 
-This repository contains three separate applications that together simulate the evolution of an authentication system.
+This repository contains two separate applications:
 
 - **Authorization Server:** Modern authentication server implementing OAuth2 concepts and issuing JWT tokens
-- **Legacy Auth API:** Example of a traditional monolithic authentication system using session cookies
 - **UI Application:** Frontend client used to authenticate users and interact with the authorization server
 
 ## Running the Project
@@ -20,23 +19,6 @@ Install the dependencies:
 pnpm install
 ```
 
-### Legacy Auth
-
-Setup the database:
-
-```
-docker compose up legacy-auth-postgres
-pnpm -C apps/legacy-auth-api run prisma:migrate
-```
-
-Run the service and the UI:
-
-```
-docker compose up legacy-auth-api
-```
-
-Navigate to http://localhost:3000/legacy
-
 ### Authorization Server
 
 Setup the database:
@@ -45,10 +27,20 @@ Setup the database:
 cp apps/auth-server/db.sample.json apps/auth-server/db.json
 ```
 
-Run the service and the UI:
+Run the service:
 
 ```
-docker compose up auth-server
+cd apps/auth-server
+pnpm run dev
+```
+
+### Web UI
+
+Run the service:
+
+```
+cd apps/web-ui
+pnpm run dev
 ```
 
 Navigate to http://localhost:3000
