@@ -42,6 +42,8 @@ export class AuthorizeController {
         query.redirectUri,
         query.responseType,
         userId,
+        query.state,
+        query.nonce,
         query.scope,
       );
 

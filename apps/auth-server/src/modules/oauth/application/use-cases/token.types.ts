@@ -25,4 +25,5 @@ export type TokenResponse = {
 export type ExecuteTokenExchangeResponse = {
   userId: string;
   scope?: string;
+  nonce?: string;
 };

@@ -18,6 +18,7 @@ export type DBSchema = {
     userId: string;
     expiresAt: Date;
     scope?: string;
+    nonce: string;
   }[];
   sessions: {
     id: string;

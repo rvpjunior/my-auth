@@ -22,6 +22,8 @@ export class AuthorizeUseCase {
     redirectUri: string,
     responseType: string,
     userId: string,
+    state: string,
+    nonce: string,
     scope?: string,
   ): Promise<AuthorizeResponse> {
     const client = this.clientRepository.findById(clientId);
@@ -42,6 +44,7 @@ export class AuthorizeUseCase {
       redirectUri,
       userId,
       new Date(Date.now() + 1000 * 60 * 10), // 10 minutes
+      nonce,
       scope,
     );
 
@@ -49,7 +52,7 @@ export class AuthorizeUseCase {
 
     return Promise.resolve({
       type: 'redirect_to_client',
-      redirectTo: `${redirectUri}?code=${authorizationCode.code}`,
+      redirectTo: `${redirectUri}?code=${authorizationCode.code}&state=${state}`,
     });
   }
 }

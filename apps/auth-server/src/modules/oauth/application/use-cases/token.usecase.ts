@@ -57,6 +57,7 @@ export class TokenUseCase {
     return {
       userId: authorizationCode.userId,
       scope: authorizationCode.scope,
+      nonce: authorizationCode.nonce,
     };
   }
 
@@ -127,6 +128,7 @@ export class TokenUseCase {
         expiresIn,
         issuer,
         name,
+        result.nonce,
       );
       return {
         access_token: accessToken,

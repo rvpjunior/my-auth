@@ -20,6 +20,7 @@ export class LowdbAuthorizationCodeRepository implements AuthorizationCodeReposi
       authorizationCode.redirectUri,
       authorizationCode.userId,
       authorizationCode.expiresAt,
+      authorizationCode.nonce,
       authorizationCode.scope,
     );
   }
@@ -32,6 +33,7 @@ export class LowdbAuthorizationCodeRepository implements AuthorizationCodeReposi
       userId: authorizationCode.userId,
       expiresAt: authorizationCode.expiresAt,
       scope: authorizationCode.scope,
+      nonce: authorizationCode.nonce,
     });
     await this.db.write();
   }

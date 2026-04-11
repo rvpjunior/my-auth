@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { exchangeTokenWithCode } from "../requests/exchangeTokenWithCode";
-import { getAuthReturnTo, removeAuthReturnTo } from "../utils/localStorage";
+import { getAuthReturnTo, removeAuthReturnTo, getAuthState, removeAuthState, getAuthTokens, getAuthNonce, removeAuthNonce } from "../utils/localStorage";
+import { getNonceFromIdToken } from "../utils/getNonceFromIdToken";
 
 export const Callback = () => {
   const [error, setError] = useState<boolean>(false);
@@ -12,11 +13,28 @@ export const Callback = () => {
     const handleCallback = async () => {
       const queryParams = new URLSearchParams(window.location.search);
       const code = queryParams.get("code");
+      const state = queryParams.get("state");
 
       if (code) {
         window.history.replaceState({}, "", window.location.pathname);
+        const authState = getAuthState();
+        removeAuthState();
+        if(state !== authState) {
+          setError(true);
+          return;
+        }
         const result = await exchangeTokenWithCode(code);
         if(!result) {
+          setError(true);
+          return;
+        }
+
+        const authTokens = getAuthTokens();
+
+        const nonceFromIdToken = authTokens.id_token ? getNonceFromIdToken(String(authTokens.id_token)) : undefined;
+        const authNonce = getAuthNonce();
+        removeAuthNonce();
+        if(nonceFromIdToken !== authNonce) {
           setError(true);
           return;
         }

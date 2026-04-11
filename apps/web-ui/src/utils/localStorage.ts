@@ -26,3 +26,31 @@ export const getUser = () => {
   const authTokens = getAuthTokens();
   return authTokens.user;
 };
+
+export const getAuthState = () => {
+  return window.localStorage.getItem("auth_state");
+};
+
+export const getAuthNonce = () => {
+  return window.localStorage.getItem("auth_nonce");
+};
+
+export const setAuthState = () => {
+  const randomState = crypto.randomUUID();
+  window.localStorage.setItem("auth_state", randomState);
+  return randomState;
+};
+
+export const setAuthNonce = () => {
+  const randomNonce = crypto.randomUUID();
+  window.localStorage.setItem("auth_nonce", randomNonce);
+  return randomNonce;
+};
+
+export const removeAuthState = () => {
+  window.localStorage.removeItem("auth_state");
+};
+
+export const removeAuthNonce = () => {
+  window.localStorage.removeItem("auth_nonce");
+};

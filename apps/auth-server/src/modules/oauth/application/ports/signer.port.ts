@@ -4,5 +4,6 @@ export interface SignerPort {
     expiresIn: number,
     issuer: string,
     name?: string,
+    nonce?: string,
   ): Promise<string>;
 }
