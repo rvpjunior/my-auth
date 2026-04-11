@@ -21,3 +21,8 @@ export type TokenResponse = {
   expires_in: number;
   refresh_token: string;
 };
+
+export type ExecuteTokenExchangeResponse = {
+  userId: string;
+  scope?: string;
+};

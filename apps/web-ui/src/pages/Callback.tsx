@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { exchangeTokenWithCode } from "../requests/exchangeTokenWithCode";
+import { getAuthReturnTo, removeAuthReturnTo } from "../utils/localStorage";
 
 export const Callback = () => {
   const [error, setError] = useState<boolean>(false);
@@ -13,43 +15,15 @@ export const Callback = () => {
 
       if (code) {
         window.history.replaceState({}, "", window.location.pathname);
-        const response = await fetch("http://localhost:4000/oauth/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            grant_type: "authorization_code",
-            code: code,
-            redirect_uri: "http://localhost:3000/callback",
-            client_id: "123",
-          }),
-          credentials: "include",
-        });
-
-        if(!response.ok) {
+        const result = await exchangeTokenWithCode(code);
+        if(!result) {
           setError(true);
           return;
         }
 
-        const data = await response.json();
-
-        const expiresInSeconds = data.expires_in;
-
-        window.localStorage.setItem(
-          "auth_tokens",
-          JSON.stringify({
-            access_token: data.access_token,
-            expires_at: new Date(
-              Date.now() + expiresInSeconds * 1000
-            ).toISOString(),
-            refresh_token: data.refresh_token,
-          })
-        );
-
-        const returnTo = window.localStorage.getItem("auth_return_to");
+        const returnTo = getAuthReturnTo();
         if(returnTo) {
-          window.localStorage.removeItem("auth_return_to");
+          removeAuthReturnTo();
           window.location.href = returnTo;
         } else {
           window.location.href = "/";

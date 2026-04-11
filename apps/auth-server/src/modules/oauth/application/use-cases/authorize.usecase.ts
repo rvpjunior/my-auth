@@ -22,6 +22,7 @@ export class AuthorizeUseCase {
     redirectUri: string,
     responseType: string,
     userId: string,
+    scope?: string,
   ): Promise<AuthorizeResponse> {
     const client = this.clientRepository.findById(clientId);
     if (!client) {
@@ -41,6 +42,7 @@ export class AuthorizeUseCase {
       redirectUri,
       userId,
       new Date(Date.now() + 1000 * 60 * 10), // 10 minutes
+      scope,
     );
 
     await this.authorizationCodeRepository.create(authorizationCode);

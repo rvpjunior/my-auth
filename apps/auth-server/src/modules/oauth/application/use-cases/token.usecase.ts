@@ -9,10 +9,13 @@ import type { SignerPort } from '@oauth/application/ports/signer.port';
 import type { RefreshTokenRepositoryPort } from '@oauth/application/ports/refresh-token-repository.port';
 import type {
   AuthorizationCodeTokenRequest,
+  ExecuteTokenExchangeResponse,
   RefreshTokenTokenRequest,
   TokenRequest,
 } from './token.types';
 import { RefreshToken } from '@oauth/domain/entities/refresh-token.entity';
+import { USER_REPOSITORY } from '@oauth/tokens';
+import type { UserRepositoryPort } from '@oauth/application/ports/user-repository.port';
 
 @Injectable()
 export class TokenUseCase {
@@ -23,11 +26,13 @@ export class TokenUseCase {
     private readonly signer: SignerPort,
     @Inject(REFRESH_TOKEN_REPOSITORY)
     private readonly refreshTokenRepository: RefreshTokenRepositoryPort,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepositoryPort,
   ) {}
 
   private async executeAuthorizationToken(
     request: AuthorizationCodeTokenRequest,
-  ): Promise<string> {
+  ): Promise<ExecuteTokenExchangeResponse> {
     const authorizationCode = this.authorizationCodeRepository.findByCode(
       request.code,
     );
@@ -49,12 +54,15 @@ export class TokenUseCase {
 
     await this.authorizationCodeRepository.delete(authorizationCode.code);
 
-    return authorizationCode.userId;
+    return {
+      userId: authorizationCode.userId,
+      scope: authorizationCode.scope,
+    };
   }
 
   private async executeRefreshToken(
     request: RefreshTokenTokenRequest,
-  ): Promise<string> {
+  ): Promise<ExecuteTokenExchangeResponse> {
     const refreshToken = this.refreshTokenRepository.findByToken(
       request.refresh_token,
     );
@@ -72,16 +80,19 @@ export class TokenUseCase {
 
     await this.refreshTokenRepository.delete(refreshToken.token);
 
-    return refreshToken.userId;
+    return {
+      userId: refreshToken.userId,
+      scope: refreshToken.scope,
+    };
   }
 
   async execute(request: TokenRequest) {
-    let userId: string;
+    let result: ExecuteTokenExchangeResponse;
 
     if (request.grant_type === 'authorization_code') {
-      userId = await this.executeAuthorizationToken(request);
+      result = await this.executeAuthorizationToken(request);
     } else if (request.grant_type === 'refresh_token') {
-      userId = await this.executeRefreshToken(request);
+      result = await this.executeRefreshToken(request);
     } else {
       throw new Error('Invalid grant type');
     }
@@ -89,14 +100,42 @@ export class TokenUseCase {
     const refreshToken = new RefreshToken(
       crypto.randomUUID(),
       request.client_id,
-      userId,
+      result.userId,
       new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours
+      result.scope,
     );
     await this.refreshTokenRepository.create(refreshToken);
 
     const expiresIn = 60 * 5; // 5 minutes
     const issuer = 'http://localhost:4000';
-    const accessToken = await this.signer.sign(userId, expiresIn, issuer);
+    const accessToken = await this.signer.sign(
+      result.userId,
+      expiresIn,
+      issuer,
+    );
+
+    if (result.scope?.includes('openid')) {
+      let name: string | undefined = undefined;
+      if (result.scope?.includes('profile')) {
+        const user = this.userRepository.findById(result.userId);
+        if (user) {
+          name = user.name;
+        }
+      }
+      const idToken = await this.signer.sign(
+        result.userId,
+        expiresIn,
+        issuer,
+        name,
+      );
+      return {
+        access_token: accessToken,
+        id_token: idToken,
+        token_type: 'Bearer',
+        expires_in: expiresIn,
+        refresh_token: refreshToken.token,
+      };
+    }
 
     return {
       access_token: accessToken,

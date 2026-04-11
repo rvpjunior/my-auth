@@ -5,5 +5,6 @@ export class AuthorizationCode {
     public readonly redirectUri: string,
     public readonly userId: string,
     public readonly expiresAt: Date,
+    public readonly scope?: string,
   ) {}
 }

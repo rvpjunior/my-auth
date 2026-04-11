@@ -19,6 +19,7 @@ export class LowdbRefreshTokenRepository implements RefreshTokenRepositoryPort {
       refreshToken.clientId,
       refreshToken.userId,
       refreshToken.expiresAt,
+      refreshToken.scope,
     );
   }
 
@@ -28,6 +29,7 @@ export class LowdbRefreshTokenRepository implements RefreshTokenRepositoryPort {
       clientId: refreshToken.clientId,
       userId: refreshToken.userId,
       expiresAt: refreshToken.expiresAt,
+      scope: refreshToken.scope,
     });
     await this.db.write();
   }

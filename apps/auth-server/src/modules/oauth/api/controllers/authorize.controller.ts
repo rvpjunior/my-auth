@@ -42,6 +42,7 @@ export class AuthorizeController {
         query.redirectUri,
         query.responseType,
         userId,
+        query.scope,
       );
 
       switch (result.type) {

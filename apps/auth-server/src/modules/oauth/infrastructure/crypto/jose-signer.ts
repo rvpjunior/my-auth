@@ -6,7 +6,12 @@ import { join } from 'path';
 
 @Injectable()
 export class JoseSigner implements SignerPort {
-  async sign(sub: string, expiresIn: number, issuer: string): Promise<string> {
+  async sign(
+    sub: string,
+    expiresIn: number,
+    issuer: string,
+    name?: string,
+  ): Promise<string> {
     const privateKeyPem = readFileSync(
       join(process.cwd(), 'certs', 'jwt-private.pem'),
       'utf8',
@@ -16,7 +21,7 @@ export class JoseSigner implements SignerPort {
     const expirationTimeInSeconds = Math.floor(expirationTime.getTime() / 1000);
 
     const privateKey = await importPKCS8(privateKeyPem, 'RS256');
-    const token = await new SignJWT({ sub, iss: issuer })
+    const token = await new SignJWT({ sub, iss: issuer, name })
       .setProtectedHeader({ alg: 'RS256' })
       .setExpirationTime(expirationTimeInSeconds)
       .setIssuedAt()

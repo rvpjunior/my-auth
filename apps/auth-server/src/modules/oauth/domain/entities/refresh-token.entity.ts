@@ -4,5 +4,6 @@ export class RefreshToken {
     public readonly clientId: string,
     public readonly userId: string,
     public readonly expiresAt: Date,
+    public readonly scope?: string,
   ) {}
 }

@@ -3,6 +3,7 @@ export type DBSchema = {
     id: string;
     email: string;
     passwordHash: string;
+    name: string;
   }[];
   clients: {
     id: string;
@@ -16,6 +17,7 @@ export type DBSchema = {
     redirectUri: string;
     userId: string;
     expiresAt: Date;
+    scope?: string;
   }[];
   sessions: {
     id: string;
@@ -27,5 +29,6 @@ export type DBSchema = {
     clientId: string;
     userId: string;
     expiresAt: Date;
+    scope?: string;
   }[];
 };
